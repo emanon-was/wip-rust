@@ -1,8 +1,11 @@
-use std;
+use std::io;
 use std::fs;
+use std::result;
 use std::path::PathBuf;
-use std::fs::File;
 use std::io::Read;
+
+pub type Result<T> = result::Result<T,Message>;
+pub type Message = String;
 
 #[derive(Debug)]
 pub struct ReadFile {
@@ -19,19 +22,20 @@ impl ReadFile {
     }
 }
 
-// derive(Debug)
+
+// derive(Debug) 
 // impl std::fmt::Debug for ReadFile {
 //     fn fmt(&self,f: &mut std::fmt::Formatter) -> std::fmt::Result {
 //         write!(f,"ReadFile{path:{:?},body:{:?}}",&self.path,&self.body)
 //     }
 // }
 
-pub fn abspath(relative_path: &str) -> Result<std::path::PathBuf, std::io::Error> {
+pub fn abspath(relative_path: &str) -> io::Result<PathBuf> {
     let path = PathBuf::from(relative_path);
     return fs::canonicalize(path);
 }
 
-pub fn read_file(path: &str) -> Result<ReadFile,String> {
+pub fn read_file(path: &str) -> Result<ReadFile> {
     let f = abspath(path);
     match f {
         Err(err) => Err(format!("{:}",err)),
@@ -39,7 +43,7 @@ pub fn read_file(path: &str) -> Result<ReadFile,String> {
     }
 }
 
-fn read_path(pathbuf: PathBuf) -> Result<ReadFile,String> {
+fn read_path(pathbuf: PathBuf) -> Result<ReadFile> {
     if !pathbuf.is_file() {
         return Err(String::from("No such file"));
     } else {
@@ -47,9 +51,9 @@ fn read_path(pathbuf: PathBuf) -> Result<ReadFile,String> {
     }
 }
 
-fn read_body(pathbuf: PathBuf) -> Result<ReadFile,String> {
+fn read_body(pathbuf: PathBuf) -> Result<ReadFile> {
     let path = pathbuf.to_str().unwrap();
-    let file = File::open(path);
+    let file = fs::File::open(path);
     match file {
         Err(err) => Err(format!("{:}",err)),
         Ok(mut f) => {
