@@ -1,7 +1,28 @@
 use std::fmt;
 
+trait Indent {
+    fn indent(&self,usize) -> String;
+}
+
+impl Indent for str {
+    fn indent(&self, n: usize) -> String {
+        return self.to_string().indent(n);
+    }
+}
+
+impl Indent for String {
+    fn indent(&self, n: usize) -> String {
+        let i = "\t".repeat(n);
+        let l: Vec<String> = self
+            .split('\n')
+            .map(|x| i.to_owned() + x)
+            .collect();
+        return l.join("\n");
+    }
+}
+
 trait Decode {
-    pub fn decode(&self) -> Vec<String>
+    fn decode(&self) -> String;
 }
 
 
@@ -11,13 +32,25 @@ pub struct Emergency {
     pub port: i32,
 }
 
+impl Decode for Emergency {
+    fn decode(&self) -> String {
+        let address = format!("Address\t{}",&self.address);
+        let port    = format!("Port\t{}",   &self.port);
+        return [
+            "Emergency".to_string(),
+            address.indent(1),
+            port.indent(1),
+            "End".to_string(),
+        ].join("\n");
+    }
+}
+
+
+
+
 impl fmt::Display for Emergency {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        writeln!(f, "Emergency").unwrap();
-        writeln!(f, "  Address {}", &self.address).unwrap();
-        writeln!(f, "  Port    {}", &self.port).unwrap();
-        writeln!(f, "End").unwrap();
-        return writeln!(f,"");
+        writeln!(f,"{}",self.decode())
     }
 }
 
