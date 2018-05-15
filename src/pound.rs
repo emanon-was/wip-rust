@@ -1,5 +1,10 @@
 use std::fmt;
 
+trait Decode {
+    pub fn decode(&self) -> Vec<String>
+}
+
+
 #[derive(Debug)]
 pub struct Emergency {
     pub address: String,
@@ -9,7 +14,7 @@ pub struct Emergency {
 impl fmt::Display for Emergency {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, "Emergency").unwrap();
-        writeln!(f, "  Address {}",  &self.address).unwrap();
+        writeln!(f, "  Address {}", &self.address).unwrap();
         writeln!(f, "  Port    {}", &self.port).unwrap();
         writeln!(f, "End").unwrap();
         return writeln!(f,"");
@@ -35,7 +40,7 @@ impl fmt::Display for Session {
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-#[allow(deprecated)]
+#[allow(dead_code)]
 pub enum SessionKind {
     IP,
     Basic,
@@ -46,28 +51,28 @@ pub enum SessionKind {
 }
 
 impl SessionKind {
-    fn as_str(&self) -> &'static str {
-        match *self {
+    fn as_str(&self) -> String {
+        match self {
             SessionKind::IP => "IP",
             SessionKind::Basic => "BASIC",
             SessionKind::URL => "URL",
             SessionKind::Parm => "PARM",
             SessionKind::Cookie => "COOKIE",
             SessionKind::Header => "HEADER",
-        }
+        }.to_string()
     }
 }
 
-// #[derive(Debug,Eq,PartialEq)]
-// pub struct BackEnd {
-//     address: String,
-//     port: i32,
-//     disabled: bool,
-//     cipher: Option<String>,
-//     priority: Option<i8>,
-//     time_out: Option<i32>,
-//     connection_time_out: Option<i32>,
-// }
+#[derive(Debug,Eq,PartialEq)]
+pub struct BackEnd {
+    address: String,
+    port: i32,
+    disabled: bool,
+    cipher: Option<String>,
+    priority: Option<i8>,
+    time_out: Option<i32>,
+    connection_time_out: Option<i32>,
+}
 
 // #[derive(Debug)]
 // pub struct Services {
