@@ -1,6 +1,6 @@
 use pound::fmt::Decode;
 
-pub struct Directives<T>(pub Vec<T>)
+pub struct Block<T>(pub Vec<T>)
 where
     T: Decode;
 

@@ -28,3 +28,27 @@ where
         return s.join("\n");
     }
 }
+
+impl Decode for String {
+    fn decode(&self) -> String {
+        self.to_owned()
+    }
+}
+
+impl Decode for i8 {
+    fn decode(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Decode for i32 {
+    fn decode(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Decode for bool {
+    fn decode(&self) -> String {
+        (*self as i32).to_string()
+    }
+}

@@ -1,4 +1,4 @@
-use pound::cfg::Directives;
+use pound::cfg::Block;
 use pound::fmt::Decode;
 use pound::fmt::Indent;
 
@@ -13,9 +13,9 @@ pub enum BackEnd {
     ConnTO(i32),
 }
 
-impl Decode for Directives<BackEnd> {
+impl Decode for Block<BackEnd> {
     fn decode(&self) -> String {
-        let Directives(v) = self;
+        let Block(v) = self;
         return format!("BackEnd\n{}\nEnd", v.decode().indent());
     }
 }
@@ -23,13 +23,13 @@ impl Decode for Directives<BackEnd> {
 impl Decode for BackEnd {
     fn decode(&self) -> String {
         match &self {
-            BackEnd::Address(s) => format!("Address\t{}", s),
-            BackEnd::Port(i) => format!("IgnoreCase\t{}", i),
-            BackEnd::Disabled(b) => format!("Disabled\t{}", (*b as i32)),
-            BackEnd::Cipher(s) => format!("HeadRequire\t{}", s),
-            BackEnd::Priority(i) => format!("HeadDeny\t{}", i),
-            BackEnd::TimeOut(i) => format!("DnyScale\t{}", i),
-            BackEnd::ConnTO(i) => format!("Redirect\t{}", i),
+            BackEnd::Address(s) => format!("Address\t{}", s.decode()),
+            BackEnd::Port(i) => format!("IgnoreCase\t{}", i.decode()),
+            BackEnd::Disabled(b) => format!("Disabled\t{}", b.decode()),
+            BackEnd::Cipher(s) => format!("HeadRequire\t{}", s.decode()),
+            BackEnd::Priority(i) => format!("HeadDeny\t{}", i.decode()),
+            BackEnd::TimeOut(i) => format!("DnyScale\t{}", i.decode()),
+            BackEnd::ConnTO(i) => format!("Redirect\t{}", i.decode()),
         }
     }
 }

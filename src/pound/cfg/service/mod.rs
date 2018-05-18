@@ -1,10 +1,10 @@
-use pound::cfg::Directives;
+use pound::cfg::Block;
 use pound::fmt::Decode;
 use pound::fmt::Indent;
 
 pub mod backend;
 pub mod emergency;
-// mod session;
+pub mod session;
 
 #[allow(dead_code)]
 pub enum Service {
@@ -16,14 +16,14 @@ pub enum Service {
     Disabled(bool),
     Redirect(String),
     RedirectWithCode(i32, String),
-    BackEnd(Directives<backend::BackEnd>),
-    // Emergency(emergency::Directives),
-    // Session(session::Directives),
+    BackEnd(Block<backend::BackEnd>),
+    Emergency(Block<emergency::Emergency>),
+    Session(Block<session::Session>),
 }
 
-impl Decode for Directives<Service> {
+impl Decode for Block<Service> {
     fn decode(&self) -> String {
-        let Directives(v) = &self;
+        let Block(v) = &self;
         return format!("Service\n{}\nEnd", v.decode().indent());
     }
 }
@@ -31,17 +31,17 @@ impl Decode for Directives<Service> {
 impl Decode for Service {
     fn decode(&self) -> String {
         match &self {
-            Service::URL(s) => format!("URL\t{}", s),
-            Service::IgnoreCase(b) => format!("IgnoreCase\t{}", (*b as i32)),
-            Service::HeadRequire(s) => format!("HeadRequire\t{}", s),
-            Service::HeadDeny(s) => format!("HeadDeny\t{}", s),
-            Service::DnyScale(b) => format!("DnyScale\t{}", (*b as i32)),
-            Service::Disabled(b) => format!("Disabled\t{}", (*b as i32)),
-            Service::Redirect(s) => format!("Redirect\t{}", s),
-            Service::RedirectWithCode(i, s) => format!("Redirect\t{}\t{}", i, s),
+            Service::URL(s) => format!("URL\t{}", s.decode()),
+            Service::IgnoreCase(b) => format!("IgnoreCase\t{}", b.decode()),
+            Service::HeadRequire(s) => format!("HeadRequire\t{}", s.decode()),
+            Service::HeadDeny(s) => format!("HeadDeny\t{}", s.decode()),
+            Service::DnyScale(b) => format!("DnyScale\t{}", b.decode()),
+            Service::Disabled(b) => format!("Disabled\t{}", b.decode()),
+            Service::Redirect(s) => format!("Redirect\t{}", s.decode()),
+            Service::RedirectWithCode(i, s) => format!("Redirect\t{}\t{}", i.decode(), s.decode()),
             Service::BackEnd(x) => x.decode(),
-            // Service::Emergency(x) => x.decode().indent(),
-            // Service::Session(x) => x.decode().indent(),
+            Service::Emergency(x) => x.decode(),
+            Service::Session(x) => x.decode(),
         }
     }
 }

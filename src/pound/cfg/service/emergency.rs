@@ -1,4 +1,4 @@
-use pound::cfg::Directives;
+use pound::cfg::Block;
 use pound::fmt::Decode;
 use pound::fmt::Indent;
 
@@ -11,15 +11,15 @@ pub enum Emergency {
 impl Decode for Emergency {
     fn decode(&self) -> String {
         match &self {
-            Emergency::Address(s) => format!("Address\t{}", s),
-            Emergency::Port(i) => format!("IgnoreCase\t{}", i),
+            Emergency::Address(s) => format!("Address\t{}", s.decode()),
+            Emergency::Port(i) => format!("IgnoreCase\t{}", i.decode()),
         }
     }
 }
 
-impl Decode for Directives<Emergency> {
+impl Decode for Block<Emergency> {
     fn decode(&self) -> String {
-        let Directives(v) = self;
+        let Block(v) = self;
         return format!("Emergency\n{}\nEnd", v.decode().indent());
     }
 }

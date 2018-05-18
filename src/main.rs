@@ -3,7 +3,7 @@ mod os;
 mod pound;
 use pound::cfg::service::backend::BackEnd;
 use pound::cfg::service::Service;
-use pound::cfg::Directives;
+use pound::cfg::Block;
 
 use pound::fmt::Decode;
 
@@ -13,10 +13,10 @@ fn main() {
         println!("{:?}", os::file::read(a));
         println!(
             "{}",
-            Directives(vec![
+            Block(vec![
                 Service::URL("\"^/test\"".to_string()),
                 Service::Disabled(false),
-                Service::BackEnd(Directives(vec![
+                Service::BackEnd(Block(vec![
                     BackEnd::Address("www.example.co.jp".to_string()),
                     BackEnd::Port(80),
                     BackEnd::Disabled(true),
