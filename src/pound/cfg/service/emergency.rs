@@ -8,6 +8,21 @@ pub enum Emergency {
     Port(i32),
 }
 
+// #[derive(Debug)]
+// pub struct EmergencyDirectives {
+//     pub address: String,
+//     pub port: i32,
+// }
+
+// impl EmergencyDirectives {
+//     pub fn set(self, directive: Emergency) -> Self {
+//         match directive {
+//             Emergency::Address(s) => EmergencyDirectives { address: s, ..self },
+//             Emergency::Port(i) => EmergencyDirectives { port: i, ..self },
+//         }
+//     }
+// }
+
 impl Decode for Emergency {
     fn decode(&self) -> String {
         match &self {

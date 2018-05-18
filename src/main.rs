@@ -2,9 +2,9 @@ use std::env;
 mod os;
 mod pound;
 use pound::cfg::service::backend::BackEnd;
+use pound::cfg::service::emergency::{Emergency, EmergencyDirectives};
 use pound::cfg::service::Service;
 use pound::cfg::Block;
-
 use pound::fmt::Decode;
 
 fn main() {
