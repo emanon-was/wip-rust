@@ -1,7 +1,11 @@
 use std::env;
 mod os;
 mod pound;
-use pound::Decode;
+use pound::cfg::service::backend::BackEnd;
+use pound::cfg::service::Service;
+use pound::cfg::Directives;
+
+use pound::fmt::Decode;
 
 fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
@@ -9,18 +13,15 @@ fn main() {
         println!("{:?}", os::file::read(a));
         println!(
             "{}",
-            pound::Emergency {
-                address: "test".to_string(),
-                port: 100
-            }.decode()
-        );
-        println!(
-            "{}",
-            pound::Session {
-                kind: pound::SessionKind::IP,
-                id: "8.8.8.8".to_string(),
-                ttl: 5000,
-            }.decode()
+            Directives(vec![
+                Service::URL("\"^/test\"".to_string()),
+                Service::Disabled(false),
+                Service::BackEnd(Directives(vec![
+                    BackEnd::Address("www.example.co.jp".to_string()),
+                    BackEnd::Port(80),
+                    BackEnd::Disabled(true),
+                ])),
+            ]).decode()
         );
     }
 }
