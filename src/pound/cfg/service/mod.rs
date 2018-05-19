@@ -17,7 +17,7 @@ pub enum Service {
     Redirect(String),
     RedirectWithCode(i32, String),
     BackEnd(Block<backend::BackEnd>),
-    Emergency(Block<emergency::Emergency>),
+    //Emergency(Block<emergency::Emergency>),
     Session(Block<session::Session>),
 }
 
@@ -40,7 +40,7 @@ impl Decode for Service {
             Service::Redirect(s) => format!("Redirect\t{}", s.decode()),
             Service::RedirectWithCode(i, s) => format!("Redirect\t{}\t{}", i.decode(), s.decode()),
             Service::BackEnd(x) => x.decode(),
-            Service::Emergency(x) => x.decode(),
+            //Service::Emergency(x) => x.decode(),
             Service::Session(x) => x.decode(),
         }
     }
